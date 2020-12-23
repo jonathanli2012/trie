@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string>
 
-#define CHILD_SIZE 200
+#define CHILD_SIZE 26
 
 namespace std {
 
@@ -32,7 +32,11 @@ public:
 
   bool lookup(string str);
 
+  bool remove_str(string str);
+
   void add_string(string str);
+
+  int ascii_to_index(char c);
 
 protected:
   trie_element_t *root_;
