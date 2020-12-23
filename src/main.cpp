@@ -12,7 +12,7 @@ void print_usage() {
             << "\th\t\tShow this help message\n"
             << "\ti <string>\tinsert\n"
             << "\tl <string>\tlookup\n"
-            << "\tp\t\tprint filter\n"
+            << "\tr <string>\tremove string\n"
             << std::endl;
 }
 
@@ -54,6 +54,9 @@ int main() {
         } else {
           std::cout << "lookup - " << command_line_text << ": FALSE\n";
         }
+        break;
+      case 'r':
+        trie_instance->remove_str(command_line_text);
         break;
       case 'h':
         print_usage();
