@@ -19,6 +19,11 @@ struct trie_element {
 class Trie {
 
 public:
+  /**
+   * @brief Constructor for Trie type
+   *
+   * dynamically allocates memory for Trie
+   */
   Trie();
 
   /**
