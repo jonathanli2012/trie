@@ -11,7 +11,6 @@ namespace std {
 typedef struct trie_element trie_element_t;
 
 struct trie_element {
-  char val;
   bool end_node;
   int children_count;
   trie_element_t *children[CHILD_SIZE];

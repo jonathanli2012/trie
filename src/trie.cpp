@@ -11,7 +11,6 @@ Trie::~Trie() {}
 trie_element_t *Trie::new_trie() {
   trie_element_t *new_trie = new trie_element_t;
   new_trie->end_node = false;
-  new_trie->val = 0;
 
   for (int i = 0; i < CHILD_SIZE; i++) {
     new_trie->children[i] = NULL;
@@ -29,19 +28,8 @@ void Trie::add_string(string str) {
       curr_trie->children[index] = next_trie;
     }
     curr_trie = curr_trie->children[index];
-    curr_trie->val = str[i];
   }
   curr_trie->end_node = true;
-}
-
-bool Trie::has_single_child(trie_element_t *elem, char c) {
-  int index = ASCII_TO_INDEX(c);
-  for (int i = 0; i < CHILD_SIZE; i++) {
-    if ((elem->children[i] != NULL) && (i != index)) {
-      return false;
-    }
-  }
-  return true;
 }
 
 bool Trie::remove_str_mem(string str) {
@@ -57,7 +45,11 @@ bool Trie::remove_str_mem(string str) {
     int index = ASCII_TO_INDEX(str[i]);
     prev_trie = curr_trie;
     curr_trie = curr_trie->children[index];
-    if(curr_trie->children_count <= 1) {
+
+    if(curr_trie->end_node && (i < len - 1)) {
+      elems.clear();
+    }
+    else if(curr_trie->children_count <= 1) {
       if(elems.size() == 0) {
         first_node = prev_trie;
       }
