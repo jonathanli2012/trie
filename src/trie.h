@@ -43,11 +43,7 @@ public:
 
   bool is_deadend(trie_element_t *trie);
 
-  bool has_single_child(trie_element_t *elem, char c);
-
   bool remove_str_mem(string str);
-
-
 
 protected:
   trie_element_t *root_;

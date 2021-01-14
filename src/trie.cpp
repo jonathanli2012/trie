@@ -46,28 +46,26 @@ bool Trie::remove_str_mem(string str) {
     prev_trie = curr_trie;
     curr_trie = curr_trie->children[index];
 
-    if(curr_trie->end_node && (i < len - 1)) {
+    if (curr_trie->end_node && (i < len - 1)) {
       elems.clear();
-    }
-    else if(curr_trie->children_count <= 1) {
-      if(elems.size() == 0) {
+    } else if (curr_trie->children_count <= 1) {
+      if (elems.size() == 0) {
         first_node = prev_trie;
       }
       elems.push_front(curr_trie);
-    }
-    else {
+    } else {
       elems.clear();
     }
   }
 
-  while(!elems.empty()) {
-    trie_element_t * tmp = elems.front();
-    delete(tmp);
+  while (!elems.empty()) {
+    trie_element_t *tmp = elems.front();
+    delete (tmp);
     elems.pop_front();
   }
 
   first_node->children_count = 0;
-  for(int i = 0; i < CHILD_SIZE; i++) {
+  for (int i = 0; i < CHILD_SIZE; i++) {
     first_node->children[i] = nullptr;
   }
 
