@@ -1,5 +1,6 @@
 #include "trie.h"
 #include <iostream>
+#include <list>
 
 namespace std {
 
@@ -9,7 +10,7 @@ Trie::~Trie() {}
 
 trie_element_t *Trie::new_trie() {
   trie_element_t *new_trie = new trie_element_t;
-  new_trie->leaf_node = false;
+  new_trie->end_node = false;
   new_trie->val = 0;
 
   for (int i = 0; i < CHILD_SIZE; i++) {
@@ -30,7 +31,7 @@ void Trie::add_string(string str) {
     curr_trie = curr_trie->children[index];
     curr_trie->val = str[i];
   }
-  curr_trie->leaf_node = true;
+  curr_trie->end_node = true;
 }
 
 bool Trie::has_single_child(trie_element_t *elem, char c) {
@@ -44,34 +45,40 @@ bool Trie::has_single_child(trie_element_t *elem, char c) {
 }
 
 bool Trie::remove_str_mem(string str) {
-
   int len = str.length();
-  int first_free_node = 0;
 
-  trie_element_t *traversal[len];
+  std::list<trie_element_t *> elems = {};
+
   trie_element_t *curr_trie = root_;
   trie_element_t *prev_trie = root_;
+  trie_element_t *first_node = root_;
 
-  for (int i = 0; i < len - 1; i++) {
+  for (int i = 0; i < len; i++) {
     int index = ASCII_TO_INDEX(str[i]);
     prev_trie = curr_trie;
     curr_trie = curr_trie->children[index];
-
-    if (has_single_child(curr_trie, str[i+1])) {
-      traversal[i] = prev_trie;
-    } else {
-      first_free_node = i + 1;
+    if(curr_trie->children_count <= 1) {
+      if(elems.size() == 0) {
+        first_node = prev_trie;
+      }
+      elems.push_front(curr_trie);
+    }
+    else {
+      elems.clear();
     }
   }
-  traversal[len - 1] = curr_trie->children[ASCII_TO_INDEX(str[len - 1])];
 
-  // remove children
-  for (int i = len - 1; i >= first_free_node; i--) {
-    //std::cout << i << "\n";
-    int index = ASCII_TO_INDEX(str[i]);
-    std::cout << traversal[i]->children[index]->val << "\n";
-    delete traversal[i]->children[index];
+  while(!elems.empty()) {
+    trie_element_t * tmp = elems.front();
+    delete(tmp);
+    elems.pop_front();
   }
+
+  first_node->children_count = 0;
+  for(int i = 0; i < CHILD_SIZE; i++) {
+    first_node->children[i] = nullptr;
+  }
+
   return true;
 }
 
@@ -85,7 +92,7 @@ bool Trie::remove_str(string str) {
   }
 
   if (!is_deadend(curr_trie)) {
-    curr_trie->leaf_node = false;
+    curr_trie->end_node = false;
     return true;
   }
 
@@ -103,16 +110,11 @@ bool Trie::lookup(string str) {
     }
     curr_trie = curr_trie->children[index];
   }
-  return curr_trie->leaf_node;
+  return curr_trie->end_node;
 }
 
 bool Trie::is_deadend(trie_element_t *trie) {
-  for (int i = 0; i < CHILD_SIZE; i++) {
-    if (trie->children[i] != NULL) {
-      return false;
-    }
-  }
-  return true;
+  return (trie->children_count == 0);
 }
 
 } // namespace std
