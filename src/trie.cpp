@@ -75,7 +75,6 @@ bool Trie::remove_str_mem(string str) {
 bool Trie::remove_str(string str) {
   int len = str.length();
   trie_element_t *curr_trie = root_;
-  trie_element_t *first_free_trie = root_;
   for (int i = 0; i < len; i++) {
     int index = ASCII_TO_INDEX(str[i]);
     curr_trie = curr_trie->children[index];
