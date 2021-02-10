@@ -6,7 +6,9 @@ namespace std {
 
 Trie::Trie() { root_ = new_trie(); }
 
-Trie::~Trie() {}
+Trie::~Trie() {
+
+}
 
 trie_element_t *Trie::new_trie() {
   trie_element_t *new_trie = new trie_element_t;
